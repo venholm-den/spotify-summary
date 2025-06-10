@@ -1,148 +1,120 @@
-
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { getAccessToken, getTopTracks } from "./utils/spotify.js";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN } = process.env;
 
-const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN } =
-  process.env;
-
-const formatDuration = (ms) => {
-  const minutes = Math.floor(ms / 60000);
-  const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, "0");
-  return `${minutes}:${seconds}`;
-};
-
-const ensureOutputDir = () => {
-  const outputDir = path.join(__dirname, "output");
-  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
-};
-
-const generateStats = (tracks) => {
-  const durations = tracks.map((t) => t.duration_ms);
-  const avgDuration = formatDuration(
-    durations.reduce((a, b) => a + b, 0) / durations.length
-  );
-
-  const artistCount = {};
-  tracks.forEach((t) => {
-    t.artists.forEach((a) => {
-      artistCount[a.name] = (artistCount[a.name] || 0) + 1;
-    });
-  });
-
-  const sortedArtists = Object.entries(artistCount).sort(
-    (a, b) => b[1] - a[1]
-  );
-  const topArtists = sortedArtists.slice(0, 3).map(([name, count]) => `${name} (${count})`);
-
-  return { avgDuration, topArtists };
-};
-
-const generateMarkdown = (tracks, stats, isoDate) => {
-  const lines = [];
-
-  lines.push(`# 🎧 Spotify Listening Summary`);
-  lines.push(`_Last updated: ${isoDate}_`);
-  lines.push(`\n## 📊 Summary Stats`);
-  lines.push(`- Average Track Duration: ${stats.avgDuration}`);
-  lines.push(`- Top Artists: ${stats.topArtists.join(", ")}`);
-  lines.push(`\n## 🔝 Top Tracks\n`);
-
-  tracks.forEach((track, i) => {
-    const artists = track.artists
-      .map((a) => `[${a.name}](${a.external_urls.spotify})`)
-      .join(", ");
-    const duration = formatDuration(track.duration_ms);
-    const cover = track.album?.images?.[0]?.url;
-
-    lines.push(`**${i + 1}.** [${track.name}](${track.external_urls.spotify}) by ${artists}`);
-    lines.push(`![Album cover](${cover})`);
-    lines.push(`⏱ Duration: ${duration}\n`);
-  });
-
-  return lines.join("\n");
-};
-
-const generateHTML = (markdownContent) => {
-  const escaped = markdownContent.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  return `<!DOCTYPE html>
+const wrapWithHTML = (title, content) => `
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Spotify Listening Summary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
   <style>
-    body { font-family: sans-serif; padding: 2rem; line-height: 1.6; }
-    img { max-width: 150px; margin-bottom: 1rem; }
-    pre { background: #f0f0f0; padding: 1rem; }
+    body {
+      font-family: sans-serif;
+      margin: 2rem auto;
+      max-width: 800px;
+      padding: 1rem;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #222;
+    }
+    .track {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+    .duration {
+      font-style: italic;
+      color: #555;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+    }
+    a {
+      color: #1DB954;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
-  <pre>${escaped}</pre>
+  ${content}
 </body>
-</html>`;
-};
+</html>
+`;
 
-const updateIndex = (filename) => {
-  const outputPath = path.join(__dirname, "output");
-  const files = fs
-    .readdirSync(outputPath)
-    .filter((f) => /^\d{4}-\d{2}\.md$/.test(f))
-    .sort()
-    .reverse();
-
-  const links = files.map((f) => {
-    const label = f.replace(".md", "");
-    return `- [${label}](./${f})`;
-  });
-
-  const content = `# 🗂 Spotify Listening Summary Archive\n\n${links.join("\n")}`;
-  fs.writeFileSync(path.join(outputPath, "index.md"), content);
+const formatDuration = (ms) => {
+  const minutes = Math.floor(ms / 60000);
+  const seconds = Math.floor((ms % 60000) / 1000);
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
 const main = async () => {
-  try {
-    ensureOutputDir();
+  const accessToken = await getAccessToken({
+    clientId: SPOTIFY_CLIENT_ID,
+    clientSecret: SPOTIFY_CLIENT_SECRET,
+    refreshToken: SPOTIFY_REFRESH_TOKEN,
+  });
 
-    const accessToken = await getAccessToken({
-      clientId: SPOTIFY_CLIENT_ID,
-      clientSecret: SPOTIFY_CLIENT_SECRET,
-      refreshToken: SPOTIFY_REFRESH_TOKEN,
-    });
-
-    const tracks = await getTopTracks(accessToken);
-    console.log("🎧 Fetched tracks:", tracks?.length || 0);
-    if (tracks?.length) console.log("🎵 First track:", tracks[0].name);
-
-    const isoDate = new Date().toISOString();
-    const [year, month] = isoDate.split("T")[0].split("-");
-    const filename = `${year}-${month}`;
-    const mdPath = path.join(__dirname, `output/${filename}.md`);
-    const htmlPath = path.join(__dirname, `output/${filename}.html`);
-
-    if (!tracks || tracks.length === 0) {
-      fs.writeFileSync(mdPath, `# 🎧 Spotify Listening Summary\n\n_Last updated: ${isoDate}_\n\n⚠️ No listening data available.`);
-      return;
-    }
-
-    const stats = generateStats(tracks);
-    const markdown = generateMarkdown(tracks, stats, isoDate);
-    const html = generateHTML(markdown);
-
-    fs.writeFileSync(mdPath, markdown);
-    fs.writeFileSync(htmlPath, html);
-    updateIndex(filename);
-
-    console.log(`✅ Written: ${filename}.md and .html`);
-  } catch (err) {
-    console.error("❌ Error generating summary:", err);
+  const tracks = await getTopTracks(accessToken);
+  if (!tracks || tracks.length === 0) {
+    console.log("⚠️ No listening data available.");
+    return;
   }
+
+  const now = new Date();
+  const label = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  const outputPath = path.join("output", `${label}.html`);
+
+  // Calculate stats
+  const avgMs = Math.round(tracks.reduce((acc, t) => acc + t.duration_ms, 0) / tracks.length);
+  const avgDuration = formatDuration(avgMs);
+  const artistCount = {};
+  tracks.forEach(track => {
+    track.artists.forEach(artist => {
+      artistCount[artist.name] = (artistCount[artist.name] || 0) + 1;
+    });
+  });
+  const topArtists = Object.entries(artistCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([name, count]) => `${name} (${count})`)
+    .join(", ");
+
+  const trackHTML = tracks.map((track, i) => `
+    <div class="track">
+      <strong>${i + 1}. <a href="${track.external_urls.spotify}" target="_blank">${track.name}</a></strong><br/>
+      by ${track.artists.map(a => `<a href="${a.external_urls.spotify}" target="_blank">${a.name}</a>`).join(", ")}<br/>
+      <img src="${track.album.images[0]?.url}" alt="Album cover" />
+      <div class="duration">⏱ Duration: ${formatDuration(track.duration_ms)}</div>
+    </div>
+  `).join("\n");
+
+  const contentHTML = `
+    <h1>🎧 Spotify Listening Summary</h1>
+    <p><em>Last updated: ${now.toISOString()}</em></p>
+
+    <h2>📊 Summary Stats</h2>
+    <ul>
+      <li>Average Track Duration: ${avgDuration}</li>
+      <li>Top Artists: ${topArtists}</li>
+    </ul>
+
+    <h2>🔝 Top Tracks</h2>
+    ${trackHTML}
+  `;
+
+  fs.writeFileSync(outputPath, wrapWithHTML(`Spotify Listening Summary - ${label}`, contentHTML));
+  console.log(`✅ Written to ${outputPath}`);
 };
 
 main();
