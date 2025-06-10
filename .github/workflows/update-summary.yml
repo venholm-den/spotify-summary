@@ -2,7 +2,7 @@ name: Update Spotify Listening Summary
 
 on:
   schedule:
-    - cron: '0 23 * * *'  # Everyday @ 23:00 UTC = 00:00 BST
+    - cron: '0 23 * * *'  # Every day at 23:00 UTC (00:00 BST)
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
+      # 🧠 Install backend dependencies & generate summary
+      - name: Install root dependencies
         run: npm install
 
       - name: Run summary script
@@ -27,20 +28,26 @@ jobs:
       - name: Generate yesterday's listening
         run: npm run yesterday
 
-      - name: Ensure docs/ folder exists
+      # 🌐 Build the Vite frontend
+      - name: Install frontend dependencies
+        working-directory: web
+        run: npm install
+
+      - name: Build frontend
+        working-directory: web
+        run: npm run build
+
+      # 🧹 Populate the docs/ folder with both frontend and generated HTML
+      - name: Prepare docs/ folder
         run: |
           mkdir -p docs
-          echo "<!DOCTYPE html><html><body><h1>Summary loading...</h1></body></html>" > docs/index.html
+          rm -rf docs/*
+          cp -r web/dist/* docs/
+          cp output/yesterday.html docs/
+          node generate-index.js
+          touch docs/.nojekyll
 
-      - name: Copy yesterday's summary to docs/
-        run: cp output/yesterday.html docs/
-
-      - name: Generate summary index.html
-        run: node generate-index.js
-
-      - name: Disable Jekyll
-        run: touch docs/.nojekyll
-
+      # 🚀 Commit and push changes
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
