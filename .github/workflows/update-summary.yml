@@ -27,13 +27,13 @@ jobs:
       - name: Generate yesterday's listening
         run: npm run yesterday
 
-      - name: Copy yesterday's summary to docs/
-        run: cp output/yesterday.html docs/
-
       - name: Ensure docs/ folder exists
         run: |
           mkdir -p docs
           echo "<!DOCTYPE html><html><body><h1>Summary loading...</h1></body></html>" > docs/index.html
+
+      - name: Copy yesterday's summary to docs/
+        run: cp output/yesterday.html docs/
 
       - name: Generate summary index.html
         run: node generate-index.js
