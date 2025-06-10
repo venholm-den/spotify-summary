@@ -18,8 +18,6 @@ const formatDuration = (ms) => {
   return `${minutes}:${seconds}`;
 };
 
-const slug = (str) => str.toLowerCase().replace(/[^\w]+/g, "-");
-
 const ensureOutputDir = () => {
   const outputDir = path.join(__dirname, "output");
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
@@ -54,7 +52,6 @@ const generateMarkdown = (tracks, stats, isoDate) => {
   lines.push(`\n## 📊 Summary Stats`);
   lines.push(`- Average Track Duration: ${stats.avgDuration}`);
   lines.push(`- Top Artists: ${stats.topArtists.join(", ")}`);
-
   lines.push(`\n## 🔝 Top Tracks\n`);
 
   tracks.forEach((track, i) => {
@@ -73,10 +70,7 @@ const generateMarkdown = (tracks, stats, isoDate) => {
 };
 
 const generateHTML = (markdownContent) => {
-  const escaped = markdownContent
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-
+  const escaped = markdownContent.replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,35 +106,42 @@ const updateIndex = (filename) => {
 };
 
 const main = async () => {
-  ensureOutputDir();
+  try {
+    ensureOutputDir();
 
-  const accessToken = await getAccessToken({
-    clientId: SPOTIFY_CLIENT_ID,
-    clientSecret: SPOTIFY_CLIENT_SECRET,
-    refreshToken: SPOTIFY_REFRESH_TOKEN,
-  });
+    const accessToken = await getAccessToken({
+      clientId: SPOTIFY_CLIENT_ID,
+      clientSecret: SPOTIFY_CLIENT_SECRET,
+      refreshToken: SPOTIFY_REFRESH_TOKEN,
+    });
 
-  const tracks = await getTopTracks(accessToken);
-  const isoDate = new Date().toISOString();
-  const [year, month] = isoDate.split("T")[0].split("-");
-  const filename = `${year}-${month}`;
-  const mdPath = path.join(__dirname, `output/${filename}.md`);
-  const htmlPath = path.join(__dirname, `output/${filename}.html`);
+    const tracks = await getTopTracks(accessToken);
+    console.log("🎧 Fetched tracks:", tracks?.length || 0);
+    if (tracks?.length) console.log("🎵 First track:", tracks[0].name);
 
-  if (!tracks || tracks.length === 0) {
-    fs.writeFileSync(mdPath, `# 🎧 Spotify Listening Summary\n\n_Last updated: ${isoDate}_\n\n⚠️ No listening data available.`);
-    return;
+    const isoDate = new Date().toISOString();
+    const [year, month] = isoDate.split("T")[0].split("-");
+    const filename = `${year}-${month}`;
+    const mdPath = path.join(__dirname, `output/${filename}.md`);
+    const htmlPath = path.join(__dirname, `output/${filename}.html`);
+
+    if (!tracks || tracks.length === 0) {
+      fs.writeFileSync(mdPath, `# 🎧 Spotify Listening Summary\n\n_Last updated: ${isoDate}_\n\n⚠️ No listening data available.`);
+      return;
+    }
+
+    const stats = generateStats(tracks);
+    const markdown = generateMarkdown(tracks, stats, isoDate);
+    const html = generateHTML(markdown);
+
+    fs.writeFileSync(mdPath, markdown);
+    fs.writeFileSync(htmlPath, html);
+    updateIndex(filename);
+
+    console.log(`✅ Written: ${filename}.md and .html`);
+  } catch (err) {
+    console.error("❌ Error generating summary:", err);
   }
-
-  const stats = generateStats(tracks);
-  const markdown = generateMarkdown(tracks, stats, isoDate);
-  const html = generateHTML(markdown);
-
-  fs.writeFileSync(mdPath, markdown);
-  fs.writeFileSync(htmlPath, html);
-  updateIndex(filename);
-
-  console.log(`✅ Written: ${filename}.md and .html`);
 };
 
 main();
