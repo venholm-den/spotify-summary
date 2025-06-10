@@ -15,42 +15,100 @@ const wrapWithHTML = (title, content) => `
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title}</title>
   <style>
+    :root {
+      --spotify-green: #1DB954;
+      --bg: #f9f9f9;
+      --text: #222;
+      --subtle: #666;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: sans-serif;
-      margin: 2rem auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    main {
       max-width: 800px;
+      margin: 2rem auto;
       padding: 1rem;
-      line-height: 1.6;
     }
-    h1, h2 {
-      color: #222;
+
+    .summary ul {
+      padding-left: 1.2rem;
     }
+
     .track {
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #ddd;
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease;
     }
-    .duration {
-      font-style: italic;
-      color: #555;
+
+    .track:hover {
+      transform: translateY(-2px);
     }
-    img {
+
+    .track img {
       max-width: 100%;
       height: auto;
       border-radius: 8px;
       margin-top: 0.5rem;
     }
-    a {
-      color: #1DB954;
+
+    .track a {
+      color: var(--spotify-green);
+      text-decoration: none;
+    }
+
+    .duration {
+      font-style: italic;
+      color: var(--subtle);
+      margin-top: 0.5rem;
+    }
+
+    .back {
+      display: inline-block;
+      margin: 1rem 0;
+      color: var(--spotify-green);
       text-decoration: none;
     }
   </style>
 </head>
 <body>
-  ${content}
+  <header>
+    <h1>${title}</h1>
+  </header>
+  <main>
+    <a href="./index.html" class="back">← Back to all months</a>
+    ${content}
+  </main>
 </body>
 </html>
 `;
+
 
 const formatDuration = (ms) => {
   const minutes = Math.floor(ms / 60000);
