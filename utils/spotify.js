@@ -1,3 +1,4 @@
+
 import fetch from "node-fetch";
 
 export async function getAccessToken({ clientId, clientSecret, refreshToken }) {
@@ -31,4 +32,18 @@ export async function getTopTracks(accessToken) {
 
   const data = await response.json();
   return data.items || [];
+}
+
+export async function getArtistGenres(accessToken, artistId) {
+  const response = await fetch(
+    `https://api.spotify.com/v1/artists/${artistId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+  return data.genres || [];
 }
