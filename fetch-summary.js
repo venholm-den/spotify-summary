@@ -16,6 +16,15 @@ const main = async () => {
 
   const tracks = await getTopTracks(accessToken);
 
+  console.log("🎧 Fetched tracks:", tracks?.length || 0);
+  if (!tracks || tracks.length === 0) {
+    fs.writeFileSync(
+      "./output/summary.md",
+      `# 🎧 Spotify Listening Summary\n\n_Last updated: ${new Date().toISOString()}_\n\n⚠️ No listening data available.`
+    );
+    return;
+  }
+
   const markdown = `# 🎧 Spotify Listening Summary\n\n_Last updated: ${new Date().toISOString()}_\n\n` +
     tracks
       .map((track, i) => {
