@@ -2,7 +2,7 @@
   "name": "spotify-listening-summary",
   "type": "module",
   "scripts": {
-    "update": "node fetch-summary.js && node generate-index.js"
+    "update": "node fetch-summary.js && node generate-index.js",
     "yesterday": "node fetch-yesterday.js"
   },
   "dependencies": {
