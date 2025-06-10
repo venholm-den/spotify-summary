@@ -2,56 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Spotify Listening Summaries</title>
+  <title>Spotify Listening Summary</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    :root {
+      --spotify-green: #1DB954;
+      --bg: #f9f9f9;
+      --text: #222;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      max-width: 700px;
-      margin: 3rem auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
       padding: 2rem;
-      background-color: #f9f9f9;
-      color: #111;
+      background: var(--bg);
+      color: var(--text);
     }
+
     h1 {
-      font-size: 2rem;
-      color: #1DB954;
-      margin-bottom: 0.5em;
+      margin-bottom: 1rem;
+      color: var(--text);
     }
+
     ul {
       list-style: none;
-      padding: 0;
+      padding-left: 0;
     }
+
     li {
-      margin: 1rem 0;
+      margin-bottom: 0.75rem;
     }
+
     a {
-      font-size: 1.1rem;
       text-decoration: none;
-      color: #1DB954;
-      background: #e8f5e9;
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      display: inline-block;
-      transition: background 0.2s ease;
+      color: var(--spotify-green);
+      font-size: 1.1rem;
     }
+
     a:hover {
-      background: #d0ebdd;
+      text-decoration: underline;
     }
-    footer {
-      margin-top: 4rem;
+
+    .note {
+      margin-top: 2rem;
       font-size: 0.9rem;
-      color: #777;
+      color: #666;
+    }
+
+    .yesterday-link {
+      margin-bottom: 2rem;
+      display: block;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>🎧 Monthly Spotify Listening Summaries</h1>
-  <p>Click any month to explore your top tracks and stats.</p>
+  <h1>🎧 Monthly Spotify Summaries</h1>
+  <a href="./yesterday.html" class="yesterday-link">🔁 See Yesterday’s Listening</a>
   <ul>
-    <li><a href="./yesterday.html">yesterday</a></li>
-<li><a href="./2025-06.html">2025-06</a></li>
+    <li><a href="./2025-06.html">2025-06</a></li>
   </ul>
-  <footer>Updated automatically every Monday · Powered by Spotify API + GitHub Actions</footer>
+  <p class="note">Auto-generated and updated daily at 00:00 GMT.</p>
 </body>
 </html>
