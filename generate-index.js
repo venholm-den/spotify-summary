@@ -1,31 +1,32 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
-const folder = "./docs";
-const files = fs.readdirSync(folder);
-const htmlFiles = files.filter((f) => f.endsWith(".html") && f !== "index.html");
+const outputDir = './output';
+const docsDir = './docs';
+const files = fs.readdirSync(outputDir).filter(f => f.endsWith('.html'));
 
-const links = htmlFiles
+const links = files
   .sort()
-  .map(
-    (file) =>
-      `<li><a href="./${file}" target="_blank">${file.replace(".html", "")}</a></li>`
-  )
-  .join("\n");
+  .reverse()
+  .map(file => {
+    const label = file.replace('.html', '');
+    return `<li><a href="./${file}">${label}</a></li>`;
+  })
+  .join('\n');
 
-const indexContent = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Spotify Listening Summary</title>
-</head>
-<body>
-  <h1>🎧 Spotify Listening Summaries</h1>
-  <ul>
-    ${links}
-  </ul>
-</body>
+const html = `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spotify Listening Summary</title>
+  </head>
+  <body>
+    <h1>🎧 Monthly Spotify Summaries</h1>
+    <ul>
+      ${links}
+    </ul>
+  </body>
 </html>`;
 
-fs.writeFileSync(path.join(folder, "index.html"), indexContent);
-console.log("✅ index.html generated");
+fs.writeFileSync(path.join(docsDir, 'index.html'), html);
+console.log('✅ index.html generated.');
