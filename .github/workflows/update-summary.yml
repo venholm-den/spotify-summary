@@ -26,10 +26,10 @@ jobs:
       - name: Run summary script
         run: npm run update
 
-      - name: Ensure docs/ exists with placeholder
+      - name: Ensure docs/ folder exists
         run: |
           mkdir -p docs
-          echo "<!DOCTYPE html><html><body><h1>Coming soon...</h1></body></html>" > docs/index.html
+          echo "<!DOCTYPE html><html><body><h1>Summary loading...</h1></body></html>" > docs/index.html
 
       - name: Generate summary index.html
         run: node generate-index.js
