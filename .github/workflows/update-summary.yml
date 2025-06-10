@@ -23,13 +23,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run script
+      - name: Run summary script
         run: npm run update
 
-      - name: Commit and push
+      - name: Ensure docs/ exists with placeholder
+        run: |
+          mkdir -p docs
+          echo "<!DOCTYPE html><html><body><h1>Coming soon...</h1></body></html>" > docs/index.html
+
+      - name: Generate summary index.html
+        run: node generate-index.js
+
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add output/
+          git add output/ docs/
           git commit -m "🔄 update Spotify summary" || echo "Nothing to commit"
           git push
