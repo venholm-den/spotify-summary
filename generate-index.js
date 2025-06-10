@@ -3,7 +3,7 @@ import path from 'path';
 
 const outputDir = './output';
 const docsDir = './docs';
-const files = fs.readdirSync(outputDir).filter(f => f.endsWith('.html'));
+const files = fs.readdirSync(outputDir).filter(f => f.endsWith('.html') && f !== 'yesterday.html');
 
 const links = files
   .sort()
@@ -64,10 +64,17 @@ const html = `<!DOCTYPE html>
       font-size: 0.9rem;
       color: #666;
     }
+
+    .yesterday-link {
+      margin-bottom: 2rem;
+      display: block;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <h1>🎧 Monthly Spotify Summaries</h1>
+  <a href="./yesterday.html" class="yesterday-link">🔁 See Yesterday’s Listening</a>
   <ul>
     ${links}
   </ul>
