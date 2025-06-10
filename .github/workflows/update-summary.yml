@@ -2,7 +2,7 @@ name: Update Spotify Listening Summary
 
 on:
   schedule:
-    - cron: '0 8 * * 1'  # every Monday at 08:00 UTC
+    - cron: '0 8 * * 1'  # Every Monday at 08:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,7 +35,7 @@ jobs:
       - name: Disable Jekyll
         run: touch docs/.nojekyll
 
-      - name: Commit and push changes
+      - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
