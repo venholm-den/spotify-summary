@@ -28,6 +28,28 @@ const wrapWithHTML = (title, content) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Listening Summary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&family=Syne+Mono&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Syne Mono', monospace;
+        background-color: #111;
+        color: #fff;
+        line-height: 1.6;
+        margin: 2rem auto;
+        max-width: 800px;
+        padding: 1rem;
+      }
+      h1, h2, h3, h4 {
+        font-family: 'Syne', sans-serif;
+        color: #fff;
+      }
+      a {
+        color: #4fd1c5;
+      }
+    </style>
+  </head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title}</title>
