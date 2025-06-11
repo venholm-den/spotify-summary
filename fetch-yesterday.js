@@ -14,84 +14,45 @@ const formatDuration = (ms) => {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
+
+const generateTrackHTML = (track, index) => {
+  const artistLinks = track.artists.map(
+    artist => `<a href="${artist.url}">${artist.name}</a>`
+  ).join(', ');
+
+  return `
+    <div class="track">
+      <strong>${index + 1}. <a href="${track.url}" target="_blank">${track.name}</a></strong><br/>
+      by ${artistLinks}<br/>
+      <img alt="Album cover" src="${track.image}"/>
+      <div class="duration">⏱ ${track.duration}</div>
+    </div>
+  `;
+};
+
+
 const wrapWithHTML = (title, content) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Yesterday's Spotify Listens</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
   <style>
-    :root {
-      --spotify-green: #1DB954;
-      --bg: #f2f2f2;
-      --text: #222;
-      --card-bg: #ffffff;
-    }
-
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg);
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-    }
-
-    .container {
+      font-family: sans-serif;
       max-width: 800px;
-      width: 100%;
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin: 2rem auto;
+      padding: 1rem;
+      line-height: 1.6;
     }
-
-    h1 {
-      color: var(--spotify-green);
-      text-align: center;
-    }
-
-    p {
-      text-align: center;
-      color: #555;
-    }
-
-    .track {
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .track img {
-      max-width: 100%;
-      border-radius: 6px;
-      margin-top: 0.5rem;
-    }
-
-    a {
-      color: var(--spotify-green);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .duration {
-      font-style: italic;
-      color: #777;
-    }
+    h1 { color: #222; }
+    .track { margin-bottom: 1.5rem; }
+    img { max-width: 100%; height: auto; border-radius: 6px; margin-top: 0.5rem; }
+    .duration { color: #555; font-style: italic; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎧 Yesterday's Listening — 2025-06-10</h1>
-    <p>Showing 36 tracks played between Tue, 10 Jun 2025 00:00:00 GMT and Wed, 11 Jun 2025 00:00:00 GMT</p>
-
-    <!-- Track list here as-is from your original HTML -->
-
-  </div>
+  ${content}
 </body>
 </html>
 `;
