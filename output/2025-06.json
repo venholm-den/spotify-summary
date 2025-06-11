@@ -1,0 +1,160 @@
+{
+  "month": "June",
+  "year": 2025,
+  "averageTrackDuration": "2:42",
+  "topArtists": [
+    "JENNIE",
+    "JISOO",
+    "Lee Young Ji",
+    "D.O.",
+    "Doechii"
+  ],
+  "topTracks": [
+    {
+      "id": 1,
+      "title": "earthquake",
+      "artist": [
+        "JISOO"
+      ],
+      "album": "AMORTAGE",
+      "duration": "3:10",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b273557019801cd1cb6d8175f3f1",
+      "spotifyUrl": "https://open.spotify.com/track/10zywlg5b0gQOC3q1A7ADx",
+      "artistUrls": [
+        "https://open.spotify.com/artist/6UZ0ba50XreR4TM8u322gs"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Small girl (feat. D.O.)",
+      "artist": [
+        "Lee Young Ji",
+        "D.O."
+      ],
+      "album": "16 Fantasy",
+      "duration": "3:09",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b273aa8e7da62fbfae5cb65f8e55",
+      "spotifyUrl": "https://open.spotify.com/track/1AtFSBJibfaqfiOByQCwZ5",
+      "artistUrls": [
+        "https://open.spotify.com/artist/0Y2AcMPMpeuPXtPQGVvRBq",
+        "https://open.spotify.com/artist/2CQZr2RPZmrcvDnaod1ldC"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "ExtraL (feat. Doechii)",
+      "artist": [
+        "JENNIE",
+        "Doechii"
+      ],
+      "album": "Ruby",
+      "duration": "2:47",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b2735a43918ea90bf1e44b7bdcfd",
+      "spotifyUrl": "https://open.spotify.com/track/4EIFwndJvGpgFjsEbNuYif",
+      "artistUrls": [
+        "https://open.spotify.com/artist/250b0Wlc5Vk0CoUsaCY84M",
+        "https://open.spotify.com/artist/4E2rKHVDssGJm2SCDOMMJB"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Igloo",
+      "artist": [
+        "KISS OF LIFE"
+      ],
+      "album": "Lose Yourself",
+      "duration": "2:11",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b27315175a3af8eb08dbc8c77a31",
+      "spotifyUrl": "https://open.spotify.com/track/2DbDefRFJ5YOfXCKOeCJJh",
+      "artistUrls": [
+        "https://open.spotify.com/artist/4TEK9tIkcoxib4GxT3O4ky"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "PYTHON",
+      "artist": [
+        "GOT7"
+      ],
+      "album": "WINTER HEPTAGON",
+      "duration": "2:31",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b2732e3e10521dae6a01259409fd",
+      "spotifyUrl": "https://open.spotify.com/track/2kol6tv2jcinBERq425Ahv",
+      "artistUrls": [
+        "https://open.spotify.com/artist/6nfDaffa50mKtEOwR8g4df"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Mantra",
+      "artist": [
+        "JENNIE"
+      ],
+      "album": "Ruby",
+      "duration": "2:16",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b2735a43918ea90bf1e44b7bdcfd",
+      "spotifyUrl": "https://open.spotify.com/track/1kUyOJb3fzUo8r0OCz5SQk",
+      "artistUrls": [
+        "https://open.spotify.com/artist/250b0Wlc5Vk0CoUsaCY84M"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "DRIP",
+      "artist": [
+        "BABYMONSTER"
+      ],
+      "album": "DRIP",
+      "duration": "3:00",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b273b00f5df4e2cd2a44075e884a",
+      "spotifyUrl": "https://open.spotify.com/track/1MUZitHRpmng5NevrvNx4T",
+      "artistUrls": [
+        "https://open.spotify.com/artist/1SIocsqdEefUTE6XKGUiVS"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Strategy (feat. Megan Thee Stallion)",
+      "artist": [
+        "TWICE",
+        "Megan Thee Stallion"
+      ],
+      "album": "STRATEGY",
+      "duration": "3:21",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b27314b36986d80fda14e6b400e7",
+      "spotifyUrl": "https://open.spotify.com/track/3tAdTGraj8pxbFnycDLMke",
+      "artistUrls": [
+        "https://open.spotify.com/artist/7n2Ycct7Beij7Dj7meI4X0",
+        "https://open.spotify.com/artist/181bsRPaVXVlUKXrxwZfHK"
+      ]
+    },
+    {
+      "id": 9,
+      "title": "typical",
+      "artist": [
+        "nate sib"
+      ],
+      "album": "for us",
+      "duration": "1:24",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b2736b0284ac227fedad7f7979ea",
+      "spotifyUrl": "https://open.spotify.com/track/5N5sBvFTPe26zjoOKUMgOD",
+      "artistUrls": [
+        "https://open.spotify.com/artist/4TNu2ZIE566yKwEhOT8eTv"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "I DO ME",
+      "artist": [
+        "KiiiKiii"
+      ],
+      "album": "I DO ME",
+      "duration": "3:10",
+      "coverUrl": "https://i.scdn.co/image/ab67616d0000b273620ccd1554246ff7d7efbbec",
+      "spotifyUrl": "https://open.spotify.com/track/5PclMa9Pxs1OFWSAS6Nid9",
+      "artistUrls": [
+        "https://open.spotify.com/artist/63sat2XSMKdwKfqspmYQKP"
+      ]
+    }
+  ]
+}
