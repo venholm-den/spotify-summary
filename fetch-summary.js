@@ -175,4 +175,28 @@ const main = async () => {
   console.log(`✅ Written to ${outputPath}`);
 };
 
+// Save structured data to JSON as well
+  const jsonOutputPath = path.join("output", `${label}.json`);
+  const jsonData = {
+    month: now.toLocaleString("default", { month: "long" }),
+    year: now.getFullYear(),
+    averageTrackDuration: avgDuration,
+    topArtists: Object.entries(artistCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([name]) => name),
+    topTracks: tracks.map((track, i) => ({
+      id: i + 1,
+      title: track.name,
+      artist: track.artists.map(a => a.name),
+      album: track.album.name,
+      duration: formatDuration(track.duration_ms),
+      coverUrl: track.album.images[0]?.url,
+      spotifyUrl: track.external_urls.spotify,
+      artistUrls: track.artists.map(a => a.external_urls.spotify)
+    }))
+  };
+  fs.writeFileSync(jsonOutputPath, JSON.stringify(jsonData, null, 2));
+  console.log(`📄 JSON summary saved to ${jsonOutputPath}`);
+
 main();

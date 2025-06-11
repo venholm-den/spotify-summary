@@ -33,6 +33,11 @@ jobs:
         working-directory: web
         run: npm install
 
+      - name: Copy JSON summaries into frontend
+        run: |
+          mkdir -p web/public/data
+          cp output/*.json web/public/data/
+
       - name: Build frontend
         working-directory: web
         run: npm run build
