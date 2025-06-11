@@ -7,6 +7,23 @@ dotenv.config();
 
 const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN } = process.env;
 
+
+const generateTrackHTML = (track, index) => {
+  const artistLinks = track.artists.map(
+    artist => `<a href="${artist.url}" target="_blank">${artist.name}</a>`
+  ).join(', ');
+
+  return `
+    <div class="track">
+      <strong>${index + 1}. <a href="${track.url}" target="_blank">${track.name}</a></strong><br/>
+      by ${artistLinks}<br/>
+      <img alt="Album cover" src="${track.image}"/>
+      <div class="duration">⏱ Duration: ${track.duration}</div>
+    </div>
+  `;
+};
+
+
 const wrapWithHTML = (title, content) => `
 <!DOCTYPE html>
 <html lang="en">
