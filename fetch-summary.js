@@ -14,88 +14,7 @@ const wrapWithHTML = (title, content) => `
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title}</title>
-  <style>
-    :root {
-      --spotify-green: #1DB954;
-      --bg: #f9f9f9;
-      --text: #222;
-      --subtle: #666;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    header {
-      background: white;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      position: sticky;
-      top: 0;
-      z-index: 999;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-
-    main {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-
-    .summary ul {
-      padding-left: 1.2rem;
-    }
-
-    .track {
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      margin: 1rem 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: transform 0.2s ease;
-    }
-
-    .track:hover {
-      transform: translateY(-2px);
-    }
-
-    .track img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-      margin-top: 0.5rem;
-    }
-
-    .track a {
-      color: var(--spotify-green);
-      text-decoration: none;
-    }
-
-    .duration {
-      font-style: italic;
-      color: var(--subtle);
-      margin-top: 0.5rem;
-    }
-
-    .back {
-      display: inline-block;
-      margin: 1rem 0;
-      color: var(--spotify-green);
-      text-decoration: none;
-    }
-  </style>
+  ...
 </head>
 <body>
   <header>
@@ -108,7 +27,6 @@ const wrapWithHTML = (title, content) => `
 </body>
 </html>
 `;
-
 
 const formatDuration = (ms) => {
   const minutes = Math.floor(ms / 60000);
@@ -173,9 +91,8 @@ const main = async () => {
 
   fs.writeFileSync(outputPath, wrapWithHTML(`Spotify Listening Summary - ${label}`, contentHTML));
   console.log(`✅ Written to ${outputPath}`);
-};
 
-// Save structured data to JSON as well
+  // ✅ Write structured JSON data
   const jsonOutputPath = path.join("output", `${label}.json`);
   const jsonData = {
     month: now.toLocaleString("default", { month: "long" }),
@@ -196,7 +113,9 @@ const main = async () => {
       artistUrls: track.artists.map(a => a.external_urls.spotify)
     }))
   };
+
   fs.writeFileSync(jsonOutputPath, JSON.stringify(jsonData, null, 2));
   console.log(`📄 JSON summary saved to ${jsonOutputPath}`);
+};
 
 main();
